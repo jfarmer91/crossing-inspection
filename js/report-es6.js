@@ -80,7 +80,8 @@ require([
         else {
           for ( i = 0; i < response.length; i++) {
             imgSrc = response[i].url;
-            imageString += "<div class='col-sm-6 col-md-4'><img src='" + imgSrc + "' " + imgClass + " " + imageStyle + "></div>";
+            // imageString += "<div class='col-sm-6 col-md-4'><img src='" + imgSrc + "' " + imgClass + " " + imageStyle + "></div>";
+            imageString += "<div data-field-span='1'><img src='" + imgSrc + "' " + imgClass + " " + imageStyle + "></div>";
           }
         }
 
@@ -128,698 +129,278 @@ require([
       var featureAttributes = results.features[i].attributes;
 
       var html=`
-<div class='row'>
-  <div class='col-xs-12'>
-    <div class='page-header'>
-      <h1>Crossing Report</h1>
-    </div>
-  </div>
-</div>
-<div class='row'>
-	<div class='col-sm-6'>
-		<div class='panel panel-primary'>
-		  <div class='panel-heading'>
-		    <h3 class='panel-title'>Crossing Number</h3>
-		  </div>
-		  <div class='panel-body text-center'>
-		    <h3>
-      `;
-
-      html += featureAttributes.DOT_Num; + "</h3>"
-
-      html += `
-    </div>
-  </div>
-</div>
-<div class='col-sm-6'>
-  <div class='panel panel-danger'>
-    <div class='panel-heading'>
-      <h3 class='panel-title'>Surface Condition</h3>
-    </div>
-    <div class='panel-body text-center'>
-      <h3>
-      `;
-
-      html += featureAttributes.XingCond; + "</h3>"
-
-      html += `
-      </div>
-    </div>
-  </div>
-</div>
-<div class='row img-row'>
-  `;
-
-  html += imageString;
-
-  html += `
-</div>
-<div class='row'>
-  <div class='col-sm-12'>
-    <div class='page-header'>
-      <h1><small>Location Information</small></h1>
-    </div>
-  </div>
-</div>
-<div class='row'>
-  <div class='col-sm-4'>
-    <div class='panel panel-default'>
-      <div class='panel-heading'>Line Name</div>
-        <div class='panel-body'>
-          <strong>
-      `;
-
-      html += featureAttributes.LineName + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>Division</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Division + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>Subdivision</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Subdivision + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>Branch</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Branch + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>MP</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.MP + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>Road Name</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Feature_Crossed + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>Town</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Town + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>County</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.County  + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-4'>
-  <div class='panel panel-default'>
-    <div class='panel-heading'>Land Use</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.FRA_LandUse  + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-xs-12'>
-  <div class='page-header'>
-    <h1><small>Crossing Information</small></h1>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Paved</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Paved  + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Surface Type</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.SurfaceType  + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Surface Type 2</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.SurfaceType2  + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Flange Material</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.FlangeMaterial + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Crossing Width</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.XingWidth + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Crossing Length</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.XingLength + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Crossing Angle</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Angle + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-info'>
-    <div class='panel-heading'>Snooper Compliant</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.SnoopCompliant + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-12'>
-  <div class='page-header'>
-    <h1><small>Safety Information</small></h1>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Warning Device</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.WDCode + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Signs or Signals?</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.SignSignal + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Channelization</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-
-      html += featureAttributes.Channelization + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Stop Line</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.StopLine + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Pavement Markings</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.RRXingPavMark + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Dynamic Envelope</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.DynamicEnv + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Gate Arms <small>(Vehicle)</small> </div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.GateArmsRoad + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Gate Arms <small>(Ped)</small> </div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.GateArmsPed + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Gate Configuration</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.GateConfig1 + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Special Gates</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.GateConfig2 + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Cantilevered (Road)</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Cant_Struc_Over + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Cantilevered (Side)</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Cant_Struc_Side + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Cantilevered Bulb</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Cant_FL_Type + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Mast Flashers</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.FL_MastCount + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Mast Flasher Type</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Mast_FL_Type
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Back Side Flashers</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.BackSideFL + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Flasher Total Count</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.FlasherCount + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Flasher Size</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.FlasherSize + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Wayside Horn</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.WaysideHorn + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Traffic Signal Control</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.HTS_Control + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Traffic Signal Nearby</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.HTS_for_Nearby_Intersection + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Bell Count</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.BellCount + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Traffic Pre-Signals</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.HTPS + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Storage Distance</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.HTPS_StorageDist + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Stop-line Distance</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.HTPS_StopLineDist + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Traffic Lane Type</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.TrafficLnType + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Traffic Lane Count</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.TrafficLnCount + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-<div class='row'>
-<div class='col-sm-3'>
-  <div class='panel panel-warning'>
-    <div class='panel-heading'>Crossing Illuminated</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.XingIllum + "</strong>";
-
-      html += `
-      </div>
-  </div>
-</div>
-<div class='col-sm-9'>
-  <div class='panel panel-success'>
-    <div class='panel-heading'>Comments</div>
-      <div class='panel-body'>
-        <strong>
-      `;
-
-      html += featureAttributes.Comments + "</strong>";
-      html += `
-      </div>
-  </div>
-</div>
-</div>
-      `;
+      <form class="grid-form">
+          <fieldset>
+              <legend>Crossing Details</legend>
+              <div data-row-span="4">
+                  <div data-field-span="1" id='xing-num' onmouseover='displayMD(this)' onmouseout='hideMD(this)' ontouchstart='displayMD(this)' ontouchend='hideMD(this)'>
+                    <label>Crossing Number</label>
+                    <input type="text" disabled="true" value="` + featureAttributes.DOT_Num + `">
+                  </div>
+                  <div data-field-span="1" id='surf-cond' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                    <label>Surface Condition</label>
+                    <input type="text" disabled="true" value="` + featureAttributes.XingCond + `">
+                  </div>
+                  <div data-field-span="1" id='feature-crossed' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                    <label>Road Name</label>
+                    <input type="text" disabled="true" value="` + featureAttributes.Feature_Crossed + `">
+                  </div>
+                  <div data-field-span="1" id='town' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                    <label>Town</label>
+                    <input type="text" disabled="true" value="` + featureAttributes.Town + `">
+                  </div>
+              </div>
+              <div data-row-span="4">
+                  <div data-field-span="2" id='rail-division' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                    <label>Rail Division</label>
+                    <input type="text" disabled="true" value="` + featureAttributes.Division + `">
+                  </div>
+                  <div data-field-span="1" id='rail-subdivision' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                    <label>Subdivision</label>
+                    <input type="text" disabled="true" value="` + featureAttributes.Subdivision + `">
+                  </div>
+                  <div data-field-span="1" id='mile-post' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                    <label>MP</label>
+                    <input type="text" disabled="true" value="` + featureAttributes.MP + `">
+                  </div>
+              </div>
+          </fieldset>
+          <fieldset>
+            <legend>Crossing Photos</legend>
+            <div data-row-span="2">` + imageString + `</div>
+            <!--<div data-row-span="2">
+              <div data-field-span="1">
+                <input type="image" disabled="true" src="http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1/401/attachments/6798">
+              </div>
+              <div data-field-span="1">
+                <input type="image" disabled="true" src="http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1/401/attachments/6799">
+              </div>
+            </div>
+            <div data-row-span="2">
+              <div data-field-span="1">
+                <input type="image" disabled="true" src="http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1/401/attachments/6800">
+              </div>
+              <div data-field-span="1">
+                <input type="image" disabled="true" src="http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1/401/attachments/6801">
+              </div>
+            </div>
+            <div data-row-span="2">
+              <div data-field-span="1">
+                <input type="image" disabled="true" src="http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1/401/attachments/6802">
+              </div>
+              <div data-field-span="1">
+                <input type="image" disabled="true" src="http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1/401/attachments/6803">
+              </div>
+            </div>-->
+          </fieldset>
+          <fieldset>
+            <legend>Crossing Details</legend>
+            <!-- <div data-row-span="6">
+              <div data-field-span="1">
+                <label>Paved</label>
+                <input type="checkbox" disabled="true" checked>
+              </div>
+              <div data-field-span="1">
+                <label>Illuminated</label>
+                <input type="checkbox" disabled="true" checked>
+              </div>
+              <div data-field-span="1">
+                <label>Road within 500'</label>
+                <input type="checkbox" disabled="true" checked>
+              </div>
+            </div> -->
+            <!-- <div data-row-span="5">
+              <div data-field-span="1">
+                <label>AOT Class</label>
+                <input type="text" disabled="true" value="3">
+              </div>
+              <div data-field-span="1">
+                <label>Functional Class</label>
+                <input type="text" disabled="true" value="3">
+              </div>
+              <div data-field-span="2">
+                <label>Pavement Marking Condition</label>
+                <input type="text" disabled="true" value="Good">
+              </div>
+              <div data-field-span="1">
+                <label>Number of Tracks</label>
+                <input type="text" disabled="true" value="3">
+              </div>
+            </div> -->
+            <div data-row-span="6">
+              <div data-field-span="2" id='surf-type' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Main Surface Material</label>
+                <input type="text" disabled="true" value="` + featureAttributes.SurfaceType + `">
+              </div>
+              <div data-field-span="2" id='surf-type-two' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Secondary Surface Material</label>
+                <input type="text" disabled="true" value="` + featureAttributes.SurfaceType2 + `">
+              </div>
+              <div data-field-span="1" id='snooper' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Snooper Compliant</label>
+                <input type="text" disabled="true" value="` + featureAttributes.SnoopCompliant + `">
+              </div>
+              <div data-field-span="1" id='flange-material' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Flange Material</label>
+                <input type="text" disabled="true" value="` + featureAttributes.FlangeMaterial + `">
+              </div>
+            </div>
+            <div data-row-span="6">
+              <div data-field-span="2" id='number-tracks' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Number of Tracks</label>
+                <input type="text" disabled="true" value="` + featureAttributes.NumTracks + `">
+              </div>
+              <div data-field-span="2" id='crossing-angle' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Angle</label>
+                <input type="text" disabled="true" value="` + featureAttributes.Angle + `">
+              </div>
+              <div data-field-span="1" id='crossing-width' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Width</label>
+                <input type="text" disabled="true" value="` + featureAttributes.XingWidth + `">
+              </div>
+              <div data-field-span="1" id='crossing-length' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Length</label>
+                <input type="text" disabled="true" value="` + featureAttributes.XingLength + `">
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Safety Information</legend>
+            <div data-row-span="3">
+              <div data-field-span="1" id='warning-device-code' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Warning Device</label>
+                <input type="text" disabled="true" value="` + featureAttributes.WDCode + `">
+              </div>
+              <div data-field-span="1" id='channelization' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Channelization</label>
+                <input type="text" disabled="true" value="` + featureAttributes.Channelization + `">
+              </div>
+              <div data-field-span="1" id='illuminated' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Illuminated</label>
+                <input type="text" disabled="true" value="` + featureAttributes.XingIllum + `">
+              </div>
+            </div>
+            <div data-row-span="4">
+              <div data-field-span="1" id='paved' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Paved</label>
+                <input type="text" disabled="true" value="` + featureAttributes.Paved + `">
+              </div>
+              <div data-field-span="1" id='stop-line' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Stop Line</label>
+                <input type="text" disabled="true" value="` + featureAttributes.StopLine + `">
+              </div>
+              <div data-field-span="1" id='rr-pave-mark' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>RR Pavement Markings</label>
+                <input type="text" disabled="true" value="` + featureAttributes.RRXingPavMark + `">
+              </div>
+              <div data-field-span="1" id='pave-mark-cond' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Pavement Markings Condition</label>
+                <input type="text" disabled="true" value="` + featureAttributes.PavMarkCond + `">
+              </div>
+            </div>
+            <div data-row-span="3">
+              <div data-field-span="1" id='gates-road' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Gate Arms (Vehicle)</label>
+                <input type="text" disabled="true" value="` + featureAttributes.GateArmsRoad + `">
+              </div>
+              <div data-field-span="1" id='gates-ped' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Gate Arms (Pedestrian)</label>
+                <input type="text" disabled="true" value="` + featureAttributes.GateArmsPed + `">
+              </div>
+              <div data-field-span="1" id='gate-config' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Gate Configuration</label>
+                <input type="text" disabled="true" value="` + featureAttributes.GateConfig1 + `">
+              </div>
+            </div>
+            <div data-row-span="3">
+              <div data-field-span="1" id='cant-struc-over' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Catilevered Masts over Road</label>
+                <input type="text" disabled="true" value="` + featureAttributes.Cant_Struc_Over + `">
+              </div>
+              <div data-field-span="1" id='cant-struc-side' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Cantilevered Mast Beside Road</label>
+                <input type="text" disabled="true" value="` + featureAttributes.Cant_Struc_Side + `">
+              </div>
+              <div data-field-span="1" id='cant-bulb-type' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Cantilevered Bulbs</label>
+                <input type="text" disabled="true" value="` + featureAttributes.Cant_FL_Type + `">
+              </div>
+            </div>
+            <div data-row-span="2">
+              <div data-field-span="1" id='basic-mast-count' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Mast Count (Not Cantilevered)</label>
+                <input type="text" disabled="true" value="` + featureAttributes.FL_MastCount + `">
+              </div>
+              <div data-field-span="1" id='mast-bulb-type' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Mast Bulbs</label>
+                <input type="text" disabled="true" value="` + featureAttributes.Mast_FL_Type + `">
+              </div>
+            </div>
+            <div data-row-span="4">
+              <div data-field-span="1" id='back-side-fl' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Back or Side Flashers</label>
+                <input type="text" disabled="true" value="` + featureAttributes.BackSideFL + `">
+              </div>
+              <div data-field-span="1" id='flasher-count' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Total Flasher Pair Count</label>
+                <input type="text" disabled="true" value="` + featureAttributes.FlasherCount + `">
+              </div>
+              <div data-field-span="1" id='flasher-size' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Flasher Bulb Size</label>
+                <input type="text" disabled="true" value="` + featureAttributes.FlasherSize + `">
+              </div>
+              <div data-field-span="1" id='bell-count' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Bell Count</label>
+                <input type="text" disabled="true" value="` + featureAttributes.BellCount + `">
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Vehicular Traffic Information</legend>
+            <div data-row-span="2">
+              <div data-field-span="1" id='traffic-lane-type' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Traffic Lane Type</label>
+                <input type="text" disabled="true" value="` + featureAttributes.TrafficLnType + `">
+              </div>
+              <div data-field-span="1" id='traffic-lane-count' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Traffic Lane Count</label>
+                <input type="text" disabled="true" value="` + featureAttributes.TrafficLnCount + `">
+              </div>
+            </div>
+            <div data-row-span="3">
+              <div data-field-span="1" id='hts-nearby-int' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Traffic Signal Nearby</label>
+                <input type="text" disabled="true" value="` + featureAttributes.HTS_for_Nearby_Intersection + `">
+              </div>
+              <div data-field-span="1" id='int-road' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Intersection Nearby (less 500 ft)</label>
+                <input type="text" disabled="true" value="` + featureAttributes.IntRd500 + `">
+              </div>
+              <div data-field-span="1" id='int-road-distance' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Distance to Intersection</label>
+                <input type="text" disabled="true" value="` + featureAttributes.IntRdDist + `">
+              </div>
+            </div>
+            <div data-row-span="2">
+              <div data-field-span="1" id='road-funcl' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>Functional Classification</label>
+                <input type="text" disabled="true" value="` + featureAttributes.RDS_FUNCL + `">
+              </div>
+              <div data-field-span="1" id='road-aot' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <label>AOT Classification</label>
+                <input type="text" disabled="true" value="` + featureAttributes.RDS_AOTCLASS + `">
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>General Comments</legend>
+            <div data-row-span="1">
+              <div data-field-span="1" id='comments' onmouseover='displayMD(this)' onmouseout='hideMD(this)'>
+                <input type="text" disabled="true" value="` + featureAttributes.Comments + `">
+              </div>
+            </div>
+          </fieldset>
+      </form>`;
 
     }
     dom.byId("info").innerHTML = html;
