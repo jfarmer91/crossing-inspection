@@ -141,7 +141,8 @@ require([
 //  ---------------------- Create Feature Layers ------------------------------
 //------------------------------------------------------------------
     //Create Crossing Feature Layer-------------------
-    var crossingUrl = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1";
+    // var crossingUrl = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/1";
+    var crossingUrl = "http://vtransmap01.aot.state.vt.us/arcgis/rest/services/Rail/CrossingInspections2015/FeatureServer/1";
 
     var crossingPoints = new FeatureLayer(crossingUrl, {
       id: "crossing-points",
@@ -153,7 +154,8 @@ require([
 
 
     //Create Sign Feature Layer---------------------------------
-    var signUrl = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/0";
+    // var signUrl = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspections2015/FeatureServer/0";
+    var signUrl = "http://vtransmap01.aot.state.vt.us/arcgis/rest/services/Rail/CrossingInspections2015/FeatureServer/0";
 
     var signPoints = new FeatureLayer(signUrl, {
       id: "sign-points",
