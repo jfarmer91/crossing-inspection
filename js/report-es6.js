@@ -36,7 +36,8 @@ require([
     'TrafficLnCount','Paved','XingIllum',
     'SurfaceType','SurfaceType2','XingCond',
     'FlangeMaterial','XingWidth','XingLength',
-    'Angle','SnoopCompliant','Comments'
+    'Angle','SnoopCompliant','Comments', 'IntRd500', 'IntRdDist',
+    'Num_Tracks', 'PaveMarkCond', 'RDS_AOTCLASS', 'RDS_FUNCL'
   ];
 
   var dotnumqs = getParameterByName("dotnum");
@@ -83,7 +84,7 @@ require([
           for ( i = 0; i < response.length; i++) {
             imgSrc = response[i].url;
             // imageString += "<div class='col-sm-6 col-md-4'><img src='" + imgSrc + "' " + imgClass + " " + imageStyle + "></div>";
-            imageString += "<div data-field-span='1'><img src='" + imgSrc + "' " + imgClass + " " + imageStyle + "></div>";
+            imageString += "<div data-field-span='1' class='blur'><a href='" + imgSrc + "' target='_blank'><img src='" + imgSrc + "' " + imgClass + " " + imageStyle + "><h3>View Full Image</h3></a></div>";
           }
         }
 
@@ -397,7 +398,35 @@ require([
     }
     dom.byId("info").innerHTML = html;
 
-    //--------Update background color of condition cells----------
+    //---------------------------------------------
+    //-----------Replace Domain Name with Values------
+    //---------------------------------------------
+    // Updates Domain Codes to Coded Value, aka description or alias
+    if (document.getElementById('warning-device-code')) {
+      var warn = document.getElementById('warning-device-code').children[1].value;
+
+      if (warn === "StopYield") {
+        document.getElementById('warning-device-code').children[1].value = "Stop or Yield";
+      } else if (warn === "XB") {
+        document.getElementById('warning-device-code').children[1].value = "Crossbucks";
+      } else if (warn === "Flashers") {
+        document.getElementById('warning-device-code').children[1].value = "Flashing Lights";
+      } else if (warn === "Gates") {
+        document.getElementById('warning-device-code').children[1].value = "1 to 3 Gates";
+      } else if (warn === "FullQuad") {
+        document.getElementById('warning-device-code').children[1].value = "Four Quad (full barrier) Gates";
+      } else if (warn === "Other") {
+        document.getElementById('warning-device-code').children[1].value = "Other signs or signals";
+      } else if (warn === "Other AWD") {
+        document.getElementById('warning-device-code').children[1].value = "Other Active Device (flagging)";
+      } else if (warn === "None") {
+        document.getElementById('warning-device-code').children[1].value = "No signs or signals";
+      }
+    }
+
+
+
+    //--------Update color of condition cells----------
       // overall condition
       var cond = document.getElementById("condition");
       var condcell = document.getElementById("surf-cond");
