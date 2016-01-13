@@ -165,7 +165,7 @@ require([
           'Num_Tracks', 'PaveMarkCond', 'RDS_AOTCLASS', 'RDS_FUNCL',
         ],
       infoTemplate: crossingTemplate,
-      minScale: 650000,
+      minScale: 10000000,
     });
     crossingTemplate.setContent(crossingPopupFeatures);
 
