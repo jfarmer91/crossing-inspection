@@ -14,8 +14,7 @@
   </head>
 
   <body>
-    <div id="image-testing">
-    </div>
+    <div id="images-testing"></div>
     <div id="images-display"></div>
 
     <script>
@@ -30,12 +29,12 @@
           if (xhttp.readyState == 4 && xhttp.status == 200) {
             var rawResponse = xhttp.responseText;
             console.log(rawResponse);
-            var startString = rawResponse.indexOf("<ul");
-            var endString = rawResponse.lastIndexOf("ul>") + 3;
-            var substring = rawResponse.slice(startString, endString);
-            console.log(startString);
-            console.log(endString);
-            console.log(substring);
+            //var startString = rawResponse.indexOf("<ul");
+            //var endString = rawResponse.lastIndexOf("ul>") + 3;
+            //var substring = rawResponse.slice(startString, endString);
+            //console.log(startString);
+            //console.log(endString);
+            //console.log(substring);
 
             document.getElementById("image-testing").innerHTML = substring;
 
