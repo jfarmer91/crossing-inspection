@@ -116,7 +116,7 @@ require([
 // -----------------Define PopupTemplates------------------------------
 //------------------------------------------------------------------
     //Crossing Template--------------
-    var crossingPopupFeatures = "<div id='popupContent' style='overflow-y:auto'><small>DOT Crossing Number:</small> <b>${DOT_Num}</b></br><small>Line Name:</small> <b>${LineName}</b></br><small>Feature Crossed:</small> <b>${Feature_Crossed}</b></br><small>Warning Device Level:</small> <b><span id='warnCode'>${WDCode}</span></b></br><small>Primary Surface Material:</small> <b>${SurfaceType}</b></br><small>Crossing Codition:</small> <b>${XingCond}</b></br> </br>     <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp'>&#x25BC Pictures &#x25BC</button></div>";
+    var crossingPopupFeatures = "<div id='popupContent' style='overflow-y:auto'><small>DOT Crossing Number:</small> <b>${DOT_Num}</b></br><small>Line Name:</small> <b>${LineName}</b></br><small>Feature Crossed:</small> <b>${Feature_Crossed}</b></br><small>Warning Device Level:</small> <b><span id='warnCode'>${WDCode}</span></b></br><small>Primary Surface Material:</small> <b>${SurfaceType}</b></br><small>Crossing Codition:</small> <b>${XingCond}</b></br> </br>     <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp' style='display:none;'>&#x25BC Pictures &#x25BC</button></div>";
 
     var crossingTemplate = new PopupTemplate({
       title: "Crossing {DOT_Num}",
@@ -126,7 +126,7 @@ require([
 
 
     //Sign Template------------------
-    var signPopupFeatures = "<div id='popupContent' ><small>Associated Crossing DOT#:</small> <b>${DOT_Num}</b></br><small>Type of Sign:</small> <b>${SignType}</b></br><small>Type of Post:</small> <b>${Post}</b></br><small>ASTM Reflective Sheeting:</small> <b>${Reflective}</b></br><small>Reflective Sheeting Condition:</small> <b>${ReflSheetCond}</b></br><small>Installation Date:</small> <b>${InstallDate}</b></br><small>Overall Condition:</small> <b>${SignCondition}</b></br> </br>   <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp'>&#x25BC Pictures &#x25BC</button></div>";
+    var signPopupFeatures = "<div id='popupContent' ><small>Associated Crossing DOT#:</small> <b>${DOT_Num}</b></br><small>Type of Sign:</small> <b>${SignType}</b></br><small>Type of Post:</small> <b>${Post}</b></br><small>ASTM Reflective Sheeting:</small> <b>${Reflective}</b></br><small>Reflective Sheeting Condition:</small> <b>${ReflSheetCond}</b></br><small>Installation Date:</small> <b>${InstallDate}</b></br><small>Overall Condition:</small> <b>${SignCondition}</b></br> </br>   <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp' style='display:none;'>&#x25BC Pictures &#x25BC</button></div>";
 
     var signTemplate = new PopupTemplate({
       title: "Crossing Sign",
@@ -168,6 +168,18 @@ require([
       minScale: 650000,
     });
     crossingTemplate.setContent(crossingPopupFeatures);
+
+    var crossingPointsSearch = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspection2015/FeatureServer/1", {
+      outFields: [
+          'OBJECTID','DOT_Num','Feature_Crossed','MP',
+          'LineName','Division','Subdivision',
+          'Branch','Town','County',
+          'FRA_LandUse','WDCode','SignSignal',
+          'SurfaceType','SurfaceType2','XingCond',
+          'XingWidth','XingLength','Comments',
+        ],
+    });
+
 
 
     //Create Sign Feature Layer---------------------------------
@@ -356,7 +368,7 @@ require([
 //---------------------------------------------------------------------------
 //---------------------Display Photos in Popup--------------------------------
 //---------------------------------------------------------------------------
-//---------------------Build Link to Report Page--------------------------------
+//---------------------Build Link to Report Page------------------------------
 //---------------------------------------------------------------------------
   on(map.infoWindow, "selection-change", when);
 
@@ -371,6 +383,49 @@ require([
       //Updates link to report page
       var dotnum = popup.getSelectedFeature().attributes.DOT_Num;
       link.href = "report.html?dotnum=" + dotnum;
+
+      var DOTsignUID = popup.getSelectedFeature().attributes.DOT_Num + "-" + popup.getSelectedFeature().attributes.SignUID;
+
+      var imgFolderSigns = "script/SignPhotos/" + DOTsignUID;
+      if (popup.getSelectedFeature().attributes.SignUID) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var rawResponse = xhttp.responseText;
+            var startString = rawResponse.indexOf("<ul");
+            var endString = rawResponse.lastIndexOf("ul>") + 3;
+            var substring = rawResponse.slice(startString, endString);
+            document.getElementById("image-testing-signs").innerHTML = substring;
+
+            //display load picture button when ready
+            pictureOpen.style.display = "inline-block";
+          }
+        };
+        xhttp.open("GET", imgFolderSigns, true);
+        xhttp.send();
+      }
+
+      // Send Ajax Request and populate invisible div with results of contents of thumbnail folder
+      var imgFolder = "script/CrossingPhotosbyID/" + dotnum;
+      if (popup.getSelectedFeature().attributes.SignUID === undefined ) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var rawResponse = xhttp.responseText;
+            var startString = rawResponse.indexOf("<ul");
+            var endString = rawResponse.lastIndexOf("ul>") + 3;
+            var substring = rawResponse.slice(startString, endString);
+            document.getElementById("image-testing").innerHTML = substring;
+
+            //display load picture button when ready
+            pictureOpen.style.display = "inline-block";
+          }
+        };
+        xhttp.open("GET", imgFolder, true);
+        xhttp.send();
+      }
+
+
 
       // Updates Domain Codes to Coded Value, aka description or alias
       if (document.getElementById('warnCode')) {
@@ -414,13 +469,39 @@ require([
 
           if ( selectedLayerId.length > 12 ) {
             selectedLayer = crossingPoints;
+
+            //Get Crossing Thumbnail imageArray
+            var imgFolderContents = document.getElementsByClassName("icon");
+            var imgFolderLength = imgFolderContents.length;
+            var imageStringArray = new Array();
+            var imageNameArray = new Array();
+
+            for (i = 0; i < imgFolderLength; i++) {
+              imageStringArray[i] = "<img src='" + imgFolder + "/" + imgFolderContents[i].innerText + "' class='img-responsive' alt='site image' width='100%'>";
+              imageNameArray[i] = imgFolderContents[i].innerText;
+              imageNameArray[i] = imageNameArray[i].substr(0,8);
+            }
           } else {
             selectedLayer = signPoints;
-            var transform = "style='transform:rotate(90deg); margin-top:42px; margin-bottom:15px'"
+
+            // image orientation style transformation
+            var transform = " style='transform:rotate(90deg); margin-top:42px; margin-bottom:15px'"
             if ( /webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
               transform = "";
             }
             imageStyle += transform;
+
+            //Get Sign Thumbnail imageArray
+            var imgFolderSignContents = document.getElementsByClassName("icon");
+            var imgFolderSignLength = imgFolderSignContents.length;
+            var imageStringSignArray = new Array();
+            var imageNameSignArray = new Array();
+
+            for (i = 0; i < imgFolderSignLength; i++) {
+              imageStringSignArray[i] = "<img src='" + imgFolderSigns + "/" + imgFolderSignContents[i].innerText + "' " + imageStyle + ">";
+              imageNameSignArray[i] = imgFolderSignContents[i].innerText;
+              imageNameSignArray[i] = imageNameSignArray[i].substr(0,6);
+            }
           }
 
           selectedLayer.queryAttachmentInfos(objectId).then(function(response){
@@ -430,8 +511,28 @@ require([
             }
             else {
               for ( i = 0; i < response.length; i++) {
-                imgSrc = response[i].url;
-                imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><a href='" + imgSrc + "' target='_blank' class='btn btn-xs btn-default btnImage' role='button'>Image " + (i+1) + ": View Full Image</a></div></td></tr><tr><td><div class='actual-image'><img src='" + imgSrc + "' " + imageStyle + "></div></td></tr>";
+                if (selectedLayerId.length > 12) {
+                  for ( i = 0; i < imageNameArray.length; i++ ) {
+                    for ( j = 0; j < response.length; j++ ) {
+                      if ( response[j].name.substr(0,8) === imageNameArray[i] ) {
+                        imgSrc = response[j].url;
+                        imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><a href='" + imgSrc + "' target='_blank' class='btn btn-xs btn-default btnImage' role='button'>Image " + (i+1) + ": View Full Image</a></div></td></tr><tr><td><div class='actual-image'>" + imageStringArray[i] + "</div></td></tr>";
+                      }
+                    }
+                  }
+                  if (imageStringArray.length > response.length) {
+                    imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><p style='text-align:center;'>There is at least one image for this crossing that cannot be displayed on the website. Missing images were likely not included due to a percieved lack of value. If you would like to see missing images, please contact us and ask for all of the original image files for this crossing (please include the DOT Crossing Number) from the 2015 Crossing Inspection.</p></div></td></tr>";
+                  }
+                } else {
+                  for ( i = 0; i < imageNameSignArray.length; i++ ) {
+                    for ( j = 0; j < response.length; j++ ) {
+                      if ( response[j].name.substr(0,6) === imageNameSignArray[i] ) {
+                        imgSrc = response[j].url;
+                        imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><a href='" + imgSrc + "' target='_blank' class='btn btn-xs btn-default btnImage' role='button'>Image " + (i+1) + ": View Full Image</a></div></td></tr><tr><td><div class='actual-image'>" + imageStringSignArray[i] + "</div></td></tr>";
+                      }
+                    }
+                  }
+                }
               }
               formatString += imageString;
             }
@@ -467,7 +568,7 @@ require([
       enableInfoWindow: true,
       showInfoWindowOnSelect: false,
       enableHighlight: false,
-      allPlaceholder: "Search for Railroad Crossings, Signs, Addresses or Places",
+      allPlaceholder: "Search for Railroad Crossings, Addresses, or Places",
       map: map,
       suggestionDelay: 0,
     }, "search");
@@ -477,7 +578,7 @@ require([
 
     //Push the first source used to search to searchSources array
     searchSources.push({
-      featureLayer: crossingPoints,
+      featureLayer: crossingPointsSearch,
       searchFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Feature_Crossed"],
       displayField: "DOT_Num",
       suggestionTemplate: "${DOT_Num}: The ${LineName} crosses ${Feature_Crossed} in ${Town}. (${XingCond})",
@@ -487,9 +588,6 @@ require([
       placeholder: "Search by DOT #, Line, Street, Town, or County",
       maxResults: 30,
       maxSuggestions: 45,
-
-      //Create an InfoTemplate
-      infoTemplate: crossingTemplate,
 
       enableSuggestions: true,
       minCharacters: 0
