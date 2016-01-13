@@ -14,7 +14,7 @@
   </head>
 
   <body>
-    <div id="image-testing" style="display:none;">
+    <div id="image-testing">
     </div>
     <div id="images-display"></div>
 
@@ -24,7 +24,7 @@
       var imgFolder = "https://api.github.com/repos/jfarmer91/crossing-inspection/contents/xImages/" + dotnumqs;
 
       if (dotnumqs) {
-        document.getElementById("images-display").innerHTML = "<img src='xImages/247-383P/IMG_1097.JPG'>"
+        document.getElementById("images-testing").innerHTML = "<img src='xImages/247-383P/IMG_1097.JPG'>"
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -46,7 +46,7 @@
             console.log(imgFolderContents);
             var imageString = "";
 
-            for (i = 1; i < imgFolderLength; i++) {
+            for (i = 0; i < imgFolderLength; i++) {
               console.log(imgFolderContents[i].innerText);
               imageString += "<img src='xImages/" + dotnumqs + "/" + imgFolderContents[i].innerText + "'>";
             }
