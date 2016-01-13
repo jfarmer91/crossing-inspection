@@ -24,6 +24,7 @@
       var imgFolder = "xImages/" + dotnumqs;
 
       if (dotnumqs) {
+        document.getElementById("images-display").innerHTML = "<img src='xImages/247-383P/IMG_1097.JPG'>"
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
