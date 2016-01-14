@@ -1,5 +1,14 @@
 var formatString = "";
 
+var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    // At least Safari 3+: "[object HTMLElementConstructor]"
+var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+var isIE = /*@cc_on!@*/false || !!document.documentMode;   // At least IE6
+
+
 require([
   "esri/map",
   "esri/arcgis/utils",
@@ -386,7 +395,7 @@ require([
 
       var DOTsignUID = popup.getSelectedFeature().attributes.DOT_Num + "-" + popup.getSelectedFeature().attributes.SignUID;
 
-      var signImgFolder = "https://api.github.com/repos/jfarmer91/crossing-inspection/contents/script/SignPhotos/" + DOTsignUID;
+      var signImgFolder = "https://api.github.com/repos/jfarmer91/crossing-inspection/contents/thumb/SignPhotos/" + DOTsignUID;
       if (popup.getSelectedFeature().attributes.SignUID) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -403,7 +412,7 @@ require([
       }
 
       // Send Ajax Request and populate invisible div with results of contents of thumbnail folder
-      var crossingImgFolder = "https://api.github.com/repos/jfarmer91/crossing-inspection/contents/script/CrossingPhotosbyID/" + dotnum;
+      var crossingImgFolder = "https://api.github.com/repos/jfarmer91/crossing-inspection/contents/thumb/CrossingPhotosbyID/" + dotnum;
       if (popup.getSelectedFeature().attributes.SignUID === undefined ) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -545,7 +554,6 @@ require([
       enableInfoWindow: true,
       showInfoWindowOnSelect: false,
       enableHighlight: false,
-      allPlaceholder: "Search for Railroad Crossings, Addresses, or Places",
       map: map,
       suggestionDelay: 0,
     }, "search");
@@ -556,7 +564,7 @@ require([
     //Push the first source used to search to searchSources array
     searchSources.push({
       featureLayer: crossingPointsSearch,
-      searchFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Feature_Crossed"],
+      searchFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Feature_Crossed", "XingCond"],
       displayField: "DOT_Num",
       suggestionTemplate: "${DOT_Num}: The ${LineName} crosses ${Feature_Crossed} in ${Town}. (${XingCond})",
       exactMatch: false,
@@ -570,19 +578,24 @@ require([
       minCharacters: 0
     });
 
-
-
-    //Push the second source used to search to searchSources array(World Geocoding Service).
-    searchSources.push(searchWidget.sources[0]);
+    if (map.width < 358) {
+      searchSources[0].placeholder = "Search Crossings";
+      document.getElementById("search_input").style.fontSize = "1.25em";
+    } else if (map.width < 439) {
+      searchSources[0].placeholder = "Search for Railroad Crossings";
+      document.getElementById("search_input").style.fontSize = "1em";
+    }
 
     // Set the source for the searchWidget to the properly ordered searchSources array
     searchWidget.set("sources", searchSources);
 
-    //Set the countryCode for World Geocoding Service
-    searchWidget.sources[1].countryCode = "US";
-    searchWidget.sources[1].maxSuggestions = 4;
 
     //Finalize creation of the search widget
     searchWidget.startup();
+
+    if ( isIE ) {
+      alert("This app best experienced in modern browsers such as Firefox or Chrome.");
+    }
+
 
 });
