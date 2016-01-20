@@ -13,7 +13,7 @@
     <script type="text/javascript" charset="utf-8" src="http://js.arcgis.com/3.14/dojox/gfx/svg.js"></script>
     <script src="http://js.arcgis.com/3.14/"></script>
     <script src="js/report.js"></script>
-    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    <script src="http://localhost:35729/livereload.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/report.css">
@@ -109,6 +109,27 @@
 
     <!--Display Metadata-->
     <script>
+
+    var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+
+    if (width < 1200) {
+      document.getElementById("metadata-body").innerHTML = "Click or tap a grid cell for more information."
+    }
+
+
+    function onMouseEventOpen(y) {
+      if (width > 1199) {
+        displayMD(y);
+      }
+    }
+
+    function onMouseEventClose(y) {
+      if (width > 1199) {
+        hideMD(y);
+      }
+    }
+
+
     function displayMD(x) {
       // document.getElementById("metadata-info").style.display = "block";
       if (x.id === "xing-num") {
@@ -331,14 +352,9 @@
       }
     }
     function hideMD() {
-      // document.getElementById("metadata-info").style.display = "none";
-      var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-      if (width > 415) {
-        document.getElementById("metadata-title").innerHTML = "Metadata";
-        document.getElementById("metadata-body").innerHTML = "Place your mouse over (or tap) a grid cell to display the data attribute explanation.";
-        // document.getElementById("metadata-domain").innerHTML = "";
-        document.getElementById("metadata-domain").style.display = "none";
-      }
+      document.getElementById("metadata-title").innerHTML = "Metadata";
+      document.getElementById("metadata-body").innerHTML = "Place your mouse over (or tap) a grid cell to display the data attribute explanation.";
+      document.getElementById("metadata-domain").style.display = "none";
     }
     function closeMD() {
       document.getElementById("metadata-info").style.display = "none";
