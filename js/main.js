@@ -19,6 +19,7 @@ require([
   "esri/dijit/Popup", "esri/dijit/PopupTemplate",
   "esri/dijit/LocateButton",
   "esri/dijit/Legend",
+  "esri/geometry/Extent",
   "esri/renderers/UniqueValueRenderer",
   "esri/symbols/Font",
   "esri/symbols/CartographicLineSymbol",
@@ -46,6 +47,7 @@ require([
     Popup, PopupTemplate,
     LocateButton,
     Legend,
+    Extent,
     UniqueValueRenderer,
     font,
     CartographicLineSymbol,
@@ -183,7 +185,7 @@ require([
     });
     crossingTemplate.setContent(crossingPopupFeatures);
 
-    var crossingPointsSearch = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspection2015/FeatureServer/1", {
+    var crossingPointsSearch = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspection2015WebAppSearch/FeatureServer/0", {
       outFields: [
           'OBJECTID','DOT_Num','Feature_Crossed','MP',
           'LineName','Division','Subdivision',
@@ -572,7 +574,6 @@ require([
 // ---------------------------- Build search --------------------------
     var searchWidget = new Search({
       enableLabel: false,
-      // autoNavigate: false,
       enableInfoWindow: true,
       showInfoWindowOnSelect: false,
       enableHighlight: false,
@@ -586,18 +587,17 @@ require([
     //Push the first source used to search to searchSources array
     searchSources.push({
       featureLayer: crossingPointsSearch,
-      searchFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Feature_Crossed", "XingCond"],
+      searchFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Division", "Subdivision", "Branch", "Feature_Crossed", "XingCond"],
       displayField: "DOT_Num",
       suggestionTemplate: "${DOT_Num}: The ${LineName} crosses ${Feature_Crossed} in ${Town}. (${XingCond})",
       exactMatch: false,
-      outFields: ["DOT_Num", "RRXingNumb", "Town", "County", "LineName", "Feature_Crossed", "XingCond"],
+      outFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Feature_Crossed", "XingCond"],
       name: "Railroad Crossings",
       placeholder: "Search by DOT #, Line, Street, Town, or County",
       maxResults: 500,
       maxSuggestions:500,
 
       enableSuggestions: true,
-      // enableSuggestionsMenu: true,
       minCharacters: 0
     });
 
@@ -608,6 +608,20 @@ require([
       searchSources[0].placeholder = "Search for Railroad Crossings";
       document.getElementById("search_input").style.fontSize = "1em";
     }
+
+    //create extent to limit search Results
+    var extent = new esri.geometry.Extent({
+      "xmin":-73.31,
+      "ymin":42.75,
+      "xmax":-71.65,
+      "ymax":45.00,
+    });
+
+    searchWidget.sources[0].maxSuggestions = 5;
+    searchWidget.sources[0].searchExtent = extent;
+
+    //Push the second source used to search to searchSources array(World Geocoding Service).
+    searchSources.push(searchWidget.sources[0]);
 
     // Set the source for the searchWidget to the properly ordered searchSources array
     searchWidget.set("sources", searchSources);
@@ -658,7 +672,7 @@ require([
 
         var insertSuggestCount = "<li id='search-suggest-totals' tabindex='0'>" + suggestions[0].length + " crossings match your current query.<hr style='margin: 10px 0px 5px 0px; padding: 0px 14px;'></li>";
 
-        var newSuggestions = "<div><ul>" + insertSuggestCount + originalSuggestions.slice(9);
+        var newSuggestions = "<div>" + insertSuggestCount + originalSuggestions.slice(5);
 
         document.getElementsByClassName("suggestionsMenu")[0].innerHTML = newSuggestions;
       }
