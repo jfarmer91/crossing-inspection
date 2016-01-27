@@ -12,12 +12,20 @@
     <script type="text/javascript" charset="utf-8" src="http://js.arcgis.com/3.14/esri/nls/jsapi_en-us.js"></script>
     <script type="text/javascript" charset="utf-8" src="http://js.arcgis.com/3.14/dojox/gfx/svg.js"></script>
     <script src="http://js.arcgis.com/3.14/"></script>
-    <script src="js/report.js"></script>
-    <script src="http://localhost:35729/livereload.js"></script>
+
+    <!--[if !IE]> -->
+      <script src="js/report.js"></script>
+    <!-- <![endif]-->
+    <!--[if IE 9]>
+      <script src="js/reportIE9.js"></script>
+    <![endif]-->
+
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/report.css">
     <link rel="stylesheet" href="css/report-navbar.css">
+    <link rel="stylesheet" href="css/report-print.css">
 
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -26,6 +34,18 @@
 
     <!-- Gridforms CSS -->
     <link rel="stylesheet" type="text/css" href="gridforms/gridforms.css">
+
+    <!--[if IE 7]>
+      <script>alert("This app best experienced in modern browsers such as Firefox or Chrome.");</script>
+    <![endif]-->
+    <!--[if IE 8]>
+      <script>alert("This app best experienced in modern browsers such as Firefox or Chrome.");</script>
+      <script src="js/reportIE9xdr.js"></script>
+    <![endif]-->
+    <!--[if IE 9]>
+      <script>alert("This app best experienced in modern browsers such as Firefox or Chrome.");</script>
+    <![endif]-->
+
 
     <!-- Google Analytics -->
     <script>
@@ -75,35 +95,16 @@
       </div>
     </div>
 
-    <!-- <nav class="navbar navbar-inverse navbar-static-top report" id="navigation-bar">
-      <div class="container">
-          <div class="row">
-            <div class="col-xs-3 col-sm-2 btn-head">
-              <div class="hidden-xs">
-                <a href="index.html"><button type="button" name="button" class="btn btn-primary btn-lg" onclick="self.close()">Close Report</button></a>
-              </div>
-              <div class="visible-xs-2 hidden-sm hidden-md hidden-lg">
-                <a href="index.html"><button type="button" name="button" class="btn btn-primary" onclick="self.close()"><img src="img\close.png" height="16" width="16px" alt="" /></button></a>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-7" id="report-page-title-div">
-              <h1 class="text-center" id="report-title">Crossing Report</h1>
-            </div>
-        </div>
-      </div>
-    </nav> -->
-
-
     <div class="container-fluid" id="info"></div>
     <div id="metadata-info">
       <div class="metadata-heading">
-        <h4 id="metadata-title">Metadata</h4>
+        <h3 id="metadata-title">Metadata</h3>
         <hr class="style-one">
       </div>
       <div id="metadata-full-body">
         <p id='metadata-body'>Place your mouse over (or tap) a grid cell to display the data attribute explanation.</p>
         <div id="metadata-domain" style="display:none; margin-top: 50px;">
-          <h4 id="metadata-domain-title">Valid Entries</h5>
+          <h4 id="metadata-domain-title">Valid Entries</h4>
           <hr class="style-one" style="padding-right:10px; padding-left:10px;">
           <p id='metadata-domain-text'></p>
         </div>
@@ -115,7 +116,7 @@
     </div>
     <div id="left-panel">
       <div class="metadata-heading">
-        <h4>Contact Us</h4>
+        <h3>Contact Us</h3>
         <hr class="style-one">
       </div>
       <p id="contact-paragraph">If you have further questions about public railroad crossing or believe that some of the information is incorrect or out-of-date, please contact us.</p>
