@@ -1,4 +1,8 @@
-var formatString = "";
+// ----------------------------------------------------------------------------
+// -------------This is the mainIE9.js index.html or homepage when the browser
+// is IE9. Please see the main.js file for more detailed documentation-------
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 
 require([
   "esri/map",
@@ -10,14 +14,13 @@ require([
   "esri/dijit/Popup", "esri/dijit/PopupTemplate",
   "esri/dijit/LocateButton",
   "esri/dijit/Legend",
+  "esri/geometry/Extent",
   "esri/renderers/UniqueValueRenderer",
   "esri/symbols/Font",
   "esri/symbols/CartographicLineSymbol",
   "esri/symbols/SimpleFillSymbol", "esri/Color",
   "dojo/dom-class", "dojo/dom-construct", "dojo/query", "dojo/on",
   "dojo/dom-attr", "dojo/dom",
-  "dijit/layout/BorderContainer",
-  "dijit/layout/ContentPane",
   "esri/tasks/query", "esri/tasks/QueryTask",
   "esri/InfoTemplate",
   "dojo/domReady!"
@@ -37,6 +40,7 @@ require([
     Popup, PopupTemplate,
     LocateButton,
     Legend,
+    Extent,
     UniqueValueRenderer,
     font,
     CartographicLineSymbol,
@@ -108,6 +112,11 @@ require([
       scale: 5000,
     }, "locateButton");
     geoLocate.startup();
+
+    on(geoLocate, "locate", function() {
+      //Google Analytics
+      ga('send', 'event', { eventCategory: 'Locate', eventAction: 'GeoLocate', eventLabel: 'Use Geolocation Button'});
+    });
 //------------------------------------------------------------------
 
 
@@ -116,7 +125,7 @@ require([
 // -----------------Define PopupTemplates------------------------------
 //------------------------------------------------------------------
     //Crossing Template--------------
-    var crossingPopupFeatures = "<div id='popupContent' style='overflow-y:auto'><small>DOT Crossing Number:</small> <b>${DOT_Num}</b></br><small>Line Name:</small> <b>${LineName}</b></br><small>Feature Crossed:</small> <b>${Feature_Crossed}</b></br><small>Warning Device Level:</small> <b><span id='warnCode'>${WDCode}</span></b></br><small>Primary Surface Material:</small> <b>${SurfaceType}</b></br><small>Crossing Codition:</small> <b>${XingCond}</b></br> </br>     <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp'>&#x25BC Pictures &#x25BC</button></div>";
+    var crossingPopupFeatures = "<div id='popupContent' style='overflow-y:auto'><small>DOT Crossing Number:</small> <b>${DOT_Num}</b></br><small>Line Name:</small> <b>${LineName}</b></br><small>Feature Crossed:</small> <b>${Feature_Crossed}</b></br><small>Warning Device Level:</small> <b><span id='warnCode'>${WDCode}</span></b></br><small>Primary Surface Material:</small> <b>${SurfaceType}</b></br><small>Crossing Codition:</small> <b>${XingCond}</b></br> </br>     <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp' style='display:none;'>&#x25BC Pictures &#x25BC</button></div>";
 
     var crossingTemplate = new PopupTemplate({
       title: "Crossing {DOT_Num}",
@@ -126,7 +135,7 @@ require([
 
 
     //Sign Template------------------
-    var signPopupFeatures = "<div id='popupContent' ><small>Associated Crossing DOT#:</small> <b>${DOT_Num}</b></br><small>Type of Sign:</small> <b>${SignType}</b></br><small>Type of Post:</small> <b>${Post}</b></br><small>ASTM Reflective Sheeting:</small> <b>${Reflective}</b></br><small>Reflective Sheeting Condition:</small> <b>${ReflSheetCond}</b></br><small>Installation Date:</small> <b>${InstallDate}</b></br><small>Overall Condition:</small> <b>${SignCondition}</b></br> </br>   <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp'>&#x25BC Pictures &#x25BC</button></div>";
+    var signPopupFeatures = "<div id='popupContent' ><small>Associated Crossing DOT#:</small> <b>${DOT_Num}</b></br><small>Type of Sign:</small> <b>${SignType}</b></br><small>Type of Post:</small> <b>${Post}</b></br><small>ASTM Reflective Sheeting:</small> <b>${Reflective}</b></br><small>Reflective Sheeting Condition:</small> <b>${ReflSheetCond}</b></br><small>Installation Date:</small> <b>${InstallDate}</b></br><small>Overall Condition:</small> <b>${SignCondition}</b></br> </br>   <button type='button' id='popupPictures' class='btn btn-lg btn-default text-center btnHelp' style='display:none;'>&#x25BC Pictures &#x25BC</button></div>";
 
     var signTemplate = new PopupTemplate({
       title: "Crossing Sign",
@@ -141,7 +150,7 @@ require([
 //  ---------------------- Create Feature Layers ------------------------------
 //------------------------------------------------------------------
     //Create Crossing Feature Layer-------------------
-    var crossingUrl = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/CrossingInspection2015/FeatureServer/1";
+    var crossingUrl = "http://vtransmap01.aot.state.vt.us/arcgis/rest/services/Rail/CrossingInspection2015/FeatureServer/1";
 
     var crossingPoints = new FeatureLayer(crossingUrl, {
       id: "crossing-points",
@@ -169,9 +178,21 @@ require([
     });
     crossingTemplate.setContent(crossingPopupFeatures);
 
+    var crossingPointsSearch = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/CrossingInspection2015WebAppSearch/FeatureServer/0", {
+      outFields: [
+          'OBJECTID','DOT_Num','Feature_Crossed','MP',
+          'LineName','Division','Subdivision',
+          'Branch','Town','County',
+          'FRA_LandUse','WDCode','SignSignal',
+          'SurfaceType','SurfaceType2','XingCond',
+          'XingWidth','XingLength','Comments',
+        ],
+    });
+
+
 
     //Create Sign Feature Layer---------------------------------
-    var signUrl = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/CrossingInspection2015/FeatureServer/0";
+    var signUrl = "http://vtransmap01.aot.state.vt.us/arcgis/rest/services/Rail/CrossingInspection2015/FeatureServer/0";
 
     var signPoints = new FeatureLayer(signUrl, {
       id: "sign-points",
@@ -291,6 +312,9 @@ require([
         document.getElementById('legend').style.display = "block";
         document.getElementById('openMobileLegend').style.display = "none";
         document.getElementById('closeMobileLegend').style.display = "block";
+
+        //Google Analytics
+        ga('send', 'event', { eventCategory: 'Legend', eventAction: 'Open', eventLabel: 'Open Mobile Legend'});
       });
     }
 
@@ -300,6 +324,9 @@ require([
         document.getElementById('legend').style.display = "none";
         document.getElementById('openMobileLegend').style.display = "block";
         document.getElementById('closeMobileLegend').style.display = "none";
+
+        //Google Analytics
+        ga('send', 'event', { eventCategory: 'Legend', eventAction: 'Close', eventLabel: 'Close Mobile Legend'});
       });
     }
 //-------------------------------------------------------------
@@ -347,7 +374,8 @@ require([
     "id": "fullReport",
     "innerHTML": "Full Report",
     "href": "www.google.com",
-    "target": "_blank"
+    "target": "_blank",
+    // "onclick": "fullReportLink(dotnum)"
   }, dojo.query(".actionList", map.infoWindow.domNode)[0]);
 //------------------------------------------------------------------------
 
@@ -366,36 +394,23 @@ require([
 
     var featureCount = popup.count;
 
-    //Prevent load picture button from displaying until ready
-    var pictureOpen = document.getElementById('popupPictures');
-    pictureOpen.style.display = "none";
-
     if ( featureCount > 0 ) {
-
       //Updates link to report page
       var dotnum = popup.getSelectedFeature().attributes.DOT_Num;
       link.href = "report.html?dotnum=" + dotnum;
 
-      // Send Ajax Request and populate invisible div with results of contents of thumbnail folder
-      var imgFolder = "script/CrossingPhotosbyID/" + dotnum;
-      if (dotnum) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-            var rawResponse = xhttp.responseText;
-            var startString = rawResponse.indexOf("<ul");
-            var endString = rawResponse.lastIndexOf("ul>") + 3;
-            var substring = rawResponse.slice(startString, endString);
-            document.getElementById("image-testing").innerHTML = substring;
-
-            //display load picture button when ready
-            pictureOpen.style.display = "inline-block";
+      //Google Analytics -- Records when the full report link is chosen from the popup along with the DOT num of the crossing
+      link.onclick = function () {
+            ga('send', 'event', { eventCategory: 'Popup', eventAction: 'View Full Report', eventLabel: dotnum + ' - Full Report Link Hit'});
           }
-        };
-        xhttp.open("GET", imgFolder, true);
-        xhttp.send();
-      }
 
+
+      // Google Analytics
+      if( popup.getSelectedFeature()._layer.id.length > 12 ) {
+        ga('send', 'event', { eventCategory: 'Popup', eventAction: 'Crossing Popup View', eventLabel: dotnum + ' - Crossing Popup Views'});
+      } else {
+        ga('send', 'event', { eventCategory: 'Popup', eventAction: 'Sign Popup View', eventLabel: dotnum + ' - Sign Popup Views'});
+      }
 
 
       // Updates Domain Codes to Coded Value, aka description or alias
@@ -422,14 +437,16 @@ require([
       }
 
 
-      // var pictureOpen = document.getElementById('popupPictures');
+      var pictureOpen = document.getElementById('popupPictures');
+
+
+      pictureOpen.style.display = "inline-block";
+
       if (pictureOpen) {
         pictureOpen.addEventListener('click', function () {
           pictureOpen.style.display = "none";
 
           var objectId = popup.getSelectedFeature().attributes.OBJECTID;
-
-          formatString = "";
 
           var imageString = "<table><tr>";
           var imageStyle = "alt='site image' width='100%'";
@@ -440,21 +457,8 @@ require([
 
           if ( selectedLayerId.length > 12 ) {
             selectedLayer = crossingPoints;
-
-            //Get Thumbnail imageArray
-            var imgFolderContents = document.getElementsByClassName("icon");
-            var imgFolderLength = imgFolderContents.length;
-            var imageStringArray = new Array();
-            for (i = 0; i < imgFolderLength; i++) {
-              imageStringArray[i] = "<img src='" + imgFolder + "/" + imgFolderContents[i].innerText + "' class='img-responsive' alt='site image' width='100%'>";
-            }
           } else {
             selectedLayer = signPoints;
-            var transform = "style='transform:rotate(90deg); margin-top:42px; margin-bottom:15px'"
-            if ( /webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
-              transform = "";
-            }
-            imageStyle += transform;
           }
 
           selectedLayer.queryAttachmentInfos(objectId).then(function(response){
@@ -463,20 +467,24 @@ require([
               deferred.resolve("no attachments");
             }
             else {
-              for ( i = 0; i < response.length; i++) {
-                if (selectedLayerId.length > 12) {
-                  imgSrc = response[i].url;
-                  imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><a href='" + imgSrc + "' target='_blank' class='btn btn-xs btn-default btnImage' role='button'>Image " + (i+1) + ": View Full Image</a></div></td></tr><tr><td><div class='actual-image'>" + imageStringArray[i] + "</div></td></tr>";
-                } else {
-                  imgSrc = response[i].url;
-                  imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><a href='" + imgSrc + "' target='_blank' class='btn btn-xs btn-default btnImage' role='button'>Image " + (i+1) + ": View Full Image</a></div></td></tr><tr><td><div class='actual-image'><img src='" + imgSrc + "' " + imageStyle + "></div></td></tr>";
+              if (selectedLayerId.length > 12) {
+                for ( j = 0; j < response.length; j++ ) {
+                  imgSrc = response[j].url;
+                  imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><a onclick='crossingImageGA()' href='photo.html?url=" + imgSrc + "' target='_blank' class='btn btn-xs btn-default btnImage' role='button'>Image " + (j+1) + ": View Full Image</a></div></td></tr><tr><td><div class='actual-image'>" + "<img src='" + imgSrc + "' " + imageStyle + ">" + "</div></td></tr>";
+                }
+              } else {
+                for ( j = 0; j < response.length; j++ ) {
+                  imgSrc = response[j].url;
+                  imageString += "<tr><td></br></td></tr><tr><td><div class='img-link'><a onclick='signImageGA()' href='photo.html?url=" + imgSrc + "' target='_blank' class='btn btn-xs btn-default btnImage' role='button'>Image " + (j+1) + ": View Full Image</a></div></td></tr><tr><td><div class='actual-image'>" + "<img src='" + imgSrc + "' " + imageStyle + ">" + "</div></td></tr>";
                 }
               }
-              formatString += imageString;
             }
           }).then(function(response) {
               var summaryInfo = document.getElementById("popupContent").innerHTML;
-              document.getElementById("popupContent").innerHTML = summaryInfo + formatString;
+              document.getElementById("popupContent").innerHTML = summaryInfo + imageString;
+
+              //Google Analytics
+              ga('send', 'event', { eventCategory: 'Popup', eventAction: 'View', eventLabel: 'Popup Image Views'});
             });
         });
       } else {
@@ -502,11 +510,11 @@ require([
 
 // ---------------------------- Build search --------------------------
     var searchWidget = new Search({
+      allPlaceholder: "Search by DOT #, Rail Line, Condition, or Place",
       enableLabel: false,
       enableInfoWindow: true,
       showInfoWindowOnSelect: false,
       enableHighlight: false,
-      allPlaceholder: "Search for Railroad Crossings, Signs, Addresses or Places",
       map: map,
       suggestionDelay: 0,
     }, "search");
@@ -516,25 +524,39 @@ require([
 
     //Push the first source used to search to searchSources array
     searchSources.push({
-      featureLayer: crossingPoints,
-      searchFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Feature_Crossed"],
+      featureLayer: crossingPointsSearch,
+      searchFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Division", "Subdivision", "Branch", "Feature_Crossed", "XingCond"],
       displayField: "DOT_Num",
       suggestionTemplate: "${DOT_Num}: The ${LineName} crosses ${Feature_Crossed} in ${Town}. (${XingCond})",
       exactMatch: false,
-      outFields: ["*"],
+      outFields: ["DOT_Num", "RRXingNum", "Town", "County", "LineName", "Feature_Crossed", "XingCond"],
       name: "Railroad Crossings",
       placeholder: "Search by DOT #, Line, Street, Town, or County",
-      maxResults: 30,
-      maxSuggestions: 45,
-
-      //Create an InfoTemplate
-      infoTemplate: crossingTemplate,
+      maxResults: 500,
+      maxSuggestions:500,
 
       enableSuggestions: true,
       minCharacters: 0
     });
 
+    if (map.width < 358) {
+      searchWidget.allPlaceholder = "Search";
+      document.getElementById("search_input").style.fontSize = "1.25em";
+    } else if (map.width < 439) {
+      searchWidget.allPlaceholder = "Search Crossings or Places";
+      document.getElementById("search_input").style.fontSize = "1em";
+    }
 
+    //create extent to limit search Results
+    var extent = new esri.geometry.Extent({
+      "xmin":-73.31,
+      "ymin":42.75,
+      "xmax":-71.65,
+      "ymax":45.00,
+    });
+
+    searchWidget.sources[0].maxSuggestions = 5;
+    searchWidget.sources[0].searchExtent = extent;
 
     //Push the second source used to search to searchSources array(World Geocoding Service).
     searchSources.push(searchWidget.sources[0]);
@@ -542,11 +564,55 @@ require([
     // Set the source for the searchWidget to the properly ordered searchSources array
     searchWidget.set("sources", searchSources);
 
-    //Set the countryCode for World Geocoding Service
-    searchWidget.sources[1].countryCode = "US";
-    searchWidget.sources[1].maxSuggestions = 4;
 
     //Finalize creation of the search widget
     searchWidget.startup();
 
+    on(searchWidget, "search-results", function() {
+
+      var searchString = searchWidget.value;
+
+      //Google Analytics --- Records Total Amount of Searches Executed
+      ga('send', 'event', { eventCategory: 'Search', eventAction: 'Execute', eventLabel: 'Search Executed'});
+
+      //Google Analytics -- Records the string that was present when the search is executed. If a feature is picked from the dropdown menu, the display name, or DOT_Num, is recorded as the input string
+      ga('send', 'event', { eventCategory: 'SearchString', eventAction: 'Total', eventLabel: searchString });
+
+
+      if (searchWidget.searchResults === null) {
+        //Google Analytics -- Records any searches executed that returned 0 results
+        ga('send', 'event', { eventCategory: 'Search', eventAction: 'Failure', eventLabel: 'Search Input Had No Results'});
+
+        //Google Analytics -- Records any failed searches organized by search term
+        ga('send', 'event', { eventCategory: 'SearchString', eventAction: 'Failure', eventLabel: searchString + ' - Search Input Had No Results'});
+      }
+      else {
+        var results = new Array(searchWidget.searchResults[0]);
+        var selections = results[0]
+
+        //Google Analytics -- Records any search that at least one crossing match for results
+        ga('send', 'event', { eventCategory: 'Search', eventAction: 'Success', eventLabel: 'Search Input Had Results'});
+        if (results[0].length === 1) {
+          //Google Analytics -- Records searches that have only one result. Indicates that the user probably knew what crossing they were looking for and successfuly found it with the current search widget settings.
+          ga('send', 'event', { eventCategory: 'Search', eventAction: 'Precise', eventLabel: 'Search Input Had Exactly One Result'});
+        }
+      }
+    });
+
+    on(searchWidget, "suggest-results", function() {
+      if (searchWidget.suggestResults === null) {
+        //do nothing
+      } else {
+
+        var originalSuggestions = document.getElementsByClassName("suggestionsMenu")[0].innerHTML;
+
+        var suggestions = new Array(searchWidget.suggestResults[0]);
+
+        var insertSuggestCount = "<li id='search-suggest-totals' tabindex='0'>" + suggestions[0].length + " crossings match your current query.<hr style='margin: 10px 0px 5px 0px; padding: 0px 14px;'></li>";
+
+        var newSuggestions = "<div>" + insertSuggestCount + originalSuggestions.slice(5);
+
+        document.getElementsByClassName("suggestionsMenu")[0].innerHTML = newSuggestions;
+      }
+    })
 });
