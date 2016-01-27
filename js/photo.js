@@ -27,7 +27,6 @@ hammertime.on('pinch panleft panright panup pandown tap press', function(ev) {
   console.log(ev.type + "whatever");
   if (ev.type === "pinch") {
     MouseWheelHandler();
-    alert("wow");
   }
 });
 
