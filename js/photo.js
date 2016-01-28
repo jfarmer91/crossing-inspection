@@ -46,6 +46,13 @@ document.getElementById("info").innerHTML = "<img src='" + photoUrl + "' id='ima
 var pictureDiv = document.getElementById("info");
 
 var hammertime = new Hammer(pictureDiv);
+// var hammertime = new Hammer.Manager(pictureDiv, {
+//   recognizers: [
+//     // [Hammer.Pan],
+//     [Hammer.Pinch, { enable: true }],
+//   ]
+// });
+
 
 hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 hammertime.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
@@ -62,22 +69,26 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
     image.style.width = Math.max(200, Math.min(4320, image.width - 25)) + "px";
   } else if (ev.type === "pinchout") {
     image.style.width = Math.max(200, Math.min(4320, image.width + 10)) + "px";
-  // } else if (ev.type === "swipeleft") {
-  //   pictureDiv.scrollLeft += 100;
-  // } else if (ev.type === "swiperight") {
-  //   pictureDiv.scrollLeft -= 100;
-  // } else if (ev.type === "swipeup") {
-  //   pictureDiv.scrollTop += 100;
-  // } else if (ev.type === "swipedown") {
-  //   pictureDiv.scrollTop -= 100;
+  } else if (ev.type === "swipeleft") {
+    console.log(ev);
+    pictureDiv.scrollLeft += Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
+    console.log(ev.target.width * 0.25);
+    // pictureDiv.scrollLeft += (Math.abs(ev.overallVelocity * 50) + 25);
+    // console.log(Math.abs(ev.overallVelocity * 50) + 25);
+  } else if (ev.type === "swiperight") {
+    pictureDiv.scrollLeft -= Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
+  } else if (ev.type === "swipeup") {
+    pictureDiv.scrollTop += Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
+  } else if (ev.type === "swipedown") {
+    pictureDiv.scrollTop -= Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
   } else if (ev.type === "panright") {
-    pictureDiv.scrollLeft -= 3;
+    pictureDiv.scrollLeft -= 2;
   } else if (ev.type === "panleft") {
-    pictureDiv.scrollLeft += 3;
+    pictureDiv.scrollLeft += 2;
   } else if (ev.type === "panup") {
-    pictureDiv.scrollTop += 3;
+    pictureDiv.scrollTop += 2;
   } else if (ev.type === "pandown") {
-    pictureDiv.scrollTop -= 3;
+    pictureDiv.scrollTop -= 2;
   }
 });
 
@@ -93,10 +104,10 @@ if (image.addEventListener) {
 function MouseWheelHandler() {
   var e = window.event || e; // old IE support
   var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-  console.log(window.event);
-  console.log(e.wheelDelta);
-  console.log(e.detail);
-  console.log(delta);
+  // console.log(window.event);
+  // console.log(e.wheelDelta);
+  // console.log(e.detail);
+  // console.log(delta);
 
   image.style.width = Math.max(200, Math.min(4320, image.width + (100 * delta))) + "px";
 
