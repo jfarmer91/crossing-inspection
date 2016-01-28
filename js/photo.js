@@ -53,6 +53,7 @@ var hammertime = new Hammer(pictureDiv);
 //   ]
 // });
 // var scrollDistance = 0;
+var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
 
 hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
@@ -68,14 +69,14 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
 
 
   if (ev.type === "pinchin") {
-    image.style.width = Math.max(200, Math.min(4320, image.width - 25)) + "px";
+    image.style.width = Math.max(width, Math.min(4320, image.width - 25)) + "px";
   } else if (ev.type === "pinchout") {
-    image.style.width = Math.max(200, Math.min(4320, image.width + 10)) + "px";
+    image.style.width = Math.max(width, Math.min(4320, image.width + 10)) + "px";
   } else if (ev.type === "swipeleft") {
     console.log(ev);
     console.log(ev.target.x);
 
-    var scrollDistance = Math.abs(ev.target.x) + Math.abs(ev.target.width * 0.1 * ev.overallVelocity);
+    var scrollDistance = Math.abs(ev.target.x) + Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
     $("#info").animate({
       scrollLeft: scrollDistance
     }, 500)
@@ -89,7 +90,7 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
 
     console.log(ev.target.x);
 
-    var scrollDistance = Math.abs(ev.target.x) - Math.abs(ev.target.width * 0.1 * ev.overallVelocity);
+    var scrollDistance = Math.abs(ev.target.x) - Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
     $("#info").animate({
       scrollLeft: scrollDistance
     }, 500)
@@ -98,7 +99,7 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
   } else if (ev.type === "swipeup") {
     console.log(ev.target.y);
 
-    var scrollDistance = Math.abs(ev.target.y) + Math.abs(ev.target.height * 0.1 * ev.overallVelocity);
+    var scrollDistance = Math.abs(ev.target.y) + Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
     $("#info").animate({
       scrollTop: scrollDistance
     }, 500)
@@ -108,7 +109,7 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
   } else if (ev.type === "swipedown") {
     console.log(ev.target.y);
 
-    var scrollDistance = Math.abs(ev.target.y) - Math.abs(ev.target.height * 0.1 * ev.overallVelocity);
+    var scrollDistance = Math.abs(ev.target.y) - Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
     $("#info").animate({
       scrollTop: scrollDistance
     }, 500)
@@ -142,7 +143,7 @@ function MouseWheelHandler() {
   // console.log(e.detail);
   // console.log(delta);
 
-  image.style.width = Math.max(200, Math.min(4320, image.width + (100 * delta))) + "px";
+  image.style.width = Math.max(width, Math.min(4320, image.width + (100 * delta))) + "px";
 
   return false;
 }
