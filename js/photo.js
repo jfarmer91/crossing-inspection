@@ -52,6 +52,7 @@ var hammertime = new Hammer(pictureDiv);
 //     [Hammer.Pinch, { enable: true }],
 //   ]
 // });
+// var scrollDistance = 0;
 
 
 hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
@@ -65,14 +66,25 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
   // console.log(window.event);
   document.getElementById("pinch-event").innerHTML = "<h3>" + ev.type + window.event + "</h3>";
 
+
   if (ev.type === "pinchin") {
     image.style.width = Math.max(200, Math.min(4320, image.width - 25)) + "px";
   } else if (ev.type === "pinchout") {
     image.style.width = Math.max(200, Math.min(4320, image.width + 10)) + "px";
   } else if (ev.type === "swipeleft") {
     console.log(ev);
-    pictureDiv.scrollLeft += Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
-    console.log(ev.target.width * 0.25);
+    console.log(ev.target.x);
+
+    var scrollDistance = Math.abs(ev.target.x) + Math.abs(ev.target.width * 0.1 * ev.overallVelocity);
+    console.log(scrollDistance);
+    $("#info").animate({
+      // pictureDiv.scrollLeft += Math.abs(ev.target.width * 0.25 * ev.overallVelocity)
+      scrollLeft: scrollDistance
+    }, 500)
+
+    // pictureDiv.scrollLeft += Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
+    // console.log(ev.target.width * 0.25);
+
     // pictureDiv.scrollLeft += (Math.abs(ev.overallVelocity * 50) + 25);
     // console.log(Math.abs(ev.overallVelocity * 50) + 25);
   } else if (ev.type === "swiperight") {
