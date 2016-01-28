@@ -53,7 +53,7 @@ hammertime.get('pinch').set({ enable: true});
 
 hammertime.on('pinch pinchin pinchout tap', function(ev) {
   console.log(ev.type + "whatever");
-  document.getElementById("pinch-event").innerHTML = "<h3>" + ev.type + "</h3>";
+  document.getElementById("pinch-event").innerHTML = "<h3>" + ev.type + window.event + "</h3>";
   if (ev.type === "pinchin") {
     image.style.width = Math.max(200, Math.min(4320, image.width - 10)) + "px";
   } else if (ev.type === "pinchout") {
