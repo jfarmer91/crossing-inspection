@@ -58,7 +58,31 @@ hammertime.on('pinch pinchin pinchout panleft panright panup pandown tap press',
   //   alert("wow");
   // }
   document.getElementById("pinch-event").innerHTML = "<h3>" + ev.type + "</h3>";
-  // if (ev.type === "pinchin") {
-  //
-  // }
+  if (ev.type === "pinchin") {
+    image.style.width = Math.max(200, Math.min(4320, image.width - 100)) + "px";
+  } else if (ev.type === "pinchout") {
+    image.style.width = Math.max(200, Math.min(4320, image.width + 100)) + "px";
+  }
 });
+
+var image = document.getElementById("image");
+
+if (image.addEventListener) {
+	// IE9, Chrome, Safari, Opera
+	image.addEventListener("mousewheel", MouseWheelHandler, false);
+	// Firefox
+	image.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+}
+
+function MouseWheelHandler() {
+  var e = window.event || e; // old IE support
+  var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+  console.log(window.event);
+  console.log(e.wheelDelta);
+  console.log(e.detail);
+  console.log(delta);
+
+  image.style.width = Math.max(200, Math.min(4320, image.width + (100 * delta))) + "px";
+
+  return false;
+}
