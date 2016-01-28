@@ -44,6 +44,8 @@ document.getElementById("info").innerHTML = "<img src='" + photoUrl + "' id='ima
 // }
 var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
+var height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
 
 var pictureDiv = document.getElementById("info");
 
@@ -58,31 +60,43 @@ hammertime.on('pinch pinchstart pinchin pinchout pan panstart panleft panright p
   document.getElementById("pinch-event").innerHTML = "<h3>" + ev.type + window.event + "</h3>";
   if (ev.type === "panstart") {
     console.log(ev);
+    console.log(ev.center.x);
     ev.target.x = "500";
-    console.log(ev.target.x);
+    // console.log(ev.target.x);
   }
 
   if (ev.type === "pinchin") {
-    // image.style.width = Math.max(width, Math.min(4320, image.width - 25)) + "px";
-    imageWidth = Math.max(width, Math.min(4320, image.width - 500)) + "px";
+    image.style.width = Math.max(width, Math.min(4320, image.width - 25)) + "px";
 
-    $("#info").animate({
-      width: imageWidth
-    }, 500)
+    pictureDiv.scrollLeft -= ev.center.x - (width / 2);
+    pictureDiv.scrollTop += ev.center.y - (height / 2);
+    // imageWidth = Math.max(width, Math.min(4320, image.width - 500)) + "px";
+
+    // $("#info").animate({
+    //   width: imageWidth
+    // }, 500)
   } else if (ev.type === "pinchout") {
-    // image.style.width = Math.max(width, Math.min(4320, image.width + 10)) + "px";
-    imageWidth = Math.max(width, Math.min(4320, image.width + 250)) + "px";
+    image.style.width = Math.max(width, Math.min(4320, image.width + 10)) + "px";
 
-    $("#info").animate({
-      width: imageWidth
-    }, 500)
+    pictureDiv.scrollLeft -= ev.center.x - (width / 2);
+    pictureDiv.scrollTop += ev.center.y - (height / 2);
+
+    // imageWidth = Math.max(width, Math.min(4320, image.width + 250)) + "px";
+
+    // $("#info").animate({
+    //   width: imageWidth
+    // }, 500)
   } else if (ev.type === "swipeleft") {
-    console.log(ev);
+    // console.log(ev.center.x - (width / 2));
+    // pictureDiv.scrollLeft -= ev.center.x - (width / 2);
+    // pictureDiv.scrollTop += ev.center.y - (height / 2);
+
+    // console.log(ev);
     // console.log(ev.target.x);
     // console.log(ev.center);
-    console.log(ev.pointers[0].screenX);
-    console.log(ev.deltaX);
-    console.log((ev.pointers[0].screenX - ev.deltaX));
+    // console.log(ev.pointers[0].screenX);
+    // console.log(ev.deltaX);
+    // console.log((ev.pointers[0].screenX - ev.deltaX));
 
     var scrollDistance = Math.abs(ev.target.x) + Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
     $("#info").animate({
@@ -91,7 +105,7 @@ hammertime.on('pinch pinchstart pinchin pinchout pan panstart panleft panright p
 
   } else if (ev.type === "swiperight") {
 
-    console.log(ev.target.x);
+    // console.log(ev.target.x);
 
     var scrollDistance = Math.abs(ev.target.x) - Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
     $("#info").animate({
@@ -99,7 +113,7 @@ hammertime.on('pinch pinchstart pinchin pinchout pan panstart panleft panright p
     }, 500)
 
   } else if (ev.type === "swipeup") {
-    console.log(ev.target.y);
+    // console.log(ev.target.y);
 
     var scrollDistance = Math.abs(ev.target.y) + Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
     $("#info").animate({
@@ -108,7 +122,7 @@ hammertime.on('pinch pinchstart pinchin pinchout pan panstart panleft panright p
 
 
   } else if (ev.type === "swipedown") {
-    console.log(ev.target.y);
+    // console.log(ev.target.y);
 
     var scrollDistance = Math.abs(ev.target.y) - Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
     $("#info").animate({
