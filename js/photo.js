@@ -26,10 +26,8 @@ function zoom (x) {
   console.log(previousWidth);
   console.log(width);
 
-
   var widthRatio = ( width / previousWidth );
   console.log(widthRatio);
-
 
   if ( previousWidth === "" ) {
     x.style.width = "200%";
@@ -43,5 +41,24 @@ function zoom (x) {
   } else if (widthRatio === 0.5 ) {
     x.style.width = "200%";
   }
-
 }
+
+var pictureDiv = document.getElementById("info");
+
+var hammertime = new Hammer(pictureDiv);
+
+hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+hammertime.get('pinch').set({ enable: true});
+
+hammertime.on('pinch pinchin pinchout panleft panright panup pandown tap press', function(ev) {
+  console.log(ev.type + "whatever");
+  // if (ev.type === "pinch") {
+  //   MouseWheelHandler();
+  //   alert("wow");
+  // }
+  document.getElementById("pinch-event").innerHTML = "<h3>" + ev.type + "</h3>";
+  // if (ev.type === "pinchin") {
+  //
+  // }
+});
