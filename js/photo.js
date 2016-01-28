@@ -68,8 +68,8 @@ hammertime.on('pinch pinchstart pinchin pinchout pan panstart panleft panright p
   if (ev.type === "pinchin") {
     image.style.width = Math.max(width, Math.min(4320, image.width - 25)) + "px";
 
-    // pictureDiv.scrollLeft -= ev.center.x - (width / 2);
-    // pictureDiv.scrollTop += ev.center.y - (height / 2);
+    pictureDiv.scrollLeft += (width / 2);
+    pictureDiv.scrollTop += (height / 2);
     // imageWidth = Math.max(width, Math.min(4320, image.width - 500)) + "px";
 
     // $("#info").animate({
@@ -78,8 +78,8 @@ hammertime.on('pinch pinchstart pinchin pinchout pan panstart panleft panright p
   } else if (ev.type === "pinchout") {
     image.style.width = Math.max(width, Math.min(4320, image.width + 10)) + "px";
 
-    // pictureDiv.scrollLeft -= ev.center.x - (width / 2);
-    // pictureDiv.scrollTop += ev.center.y - (height / 2);
+    pictureDiv.scrollLeft += - (width / 2);
+    pictureDiv.scrollTop += - (height / 2);
 
     // imageWidth = Math.max(width, Math.min(4320, image.width + 250)) + "px";
 
@@ -130,13 +130,13 @@ hammertime.on('pinch pinchstart pinchin pinchout pan panstart panleft panright p
     }, 500)
 
   } else if (ev.type === "panright") {
-    pictureDiv.scrollLeft -= 1;
+    pictureDiv.scrollLeft -= 2;
   } else if (ev.type === "panleft") {
-    pictureDiv.scrollLeft += 1;
+    pictureDiv.scrollLeft += 2;
   } else if (ev.type === "panup") {
-    pictureDiv.scrollTop += 1;
+    pictureDiv.scrollTop += 2;
   } else if (ev.type === "pandown") {
-    pictureDiv.scrollTop -= 1;
+    pictureDiv.scrollTop -= 2;
   }
 });
 
