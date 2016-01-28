@@ -47,17 +47,37 @@ var pictureDiv = document.getElementById("info");
 
 var hammertime = new Hammer(pictureDiv);
 
-// hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+hammertime.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
 
 hammertime.get('pinch').set({ enable: true});
 
-hammertime.on('pinch pinchin pinchout tap', function(ev) {
-  console.log(ev.type + "whatever");
+hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup swipedown swipeleft swiperight tap', function(ev) {
+
+  // console.log(ev.type + "whatever");
+  // console.log(window.event);
   document.getElementById("pinch-event").innerHTML = "<h3>" + ev.type + window.event + "</h3>";
+
   if (ev.type === "pinchin") {
-    image.style.width = Math.max(200, Math.min(4320, image.width - 10)) + "px";
+    image.style.width = Math.max(200, Math.min(4320, image.width - 25)) + "px";
   } else if (ev.type === "pinchout") {
     image.style.width = Math.max(200, Math.min(4320, image.width + 10)) + "px";
+  } else if (ev.type === "swipeleft") {
+    pictureDiv.scrollLeft += 100;
+  } else if (ev.type === "swiperight") {
+    pictureDiv.scrollLeft -= 100;
+  } else if (ev.type === "swipeup") {
+    pictureDiv.scrollTop += 100;
+  } else if (ev.type === "swipedown") {
+    pictureDiv.scrollTop -= 100;
+  } else if (ev.type === "panright") {
+    pictureDiv.scrollLeft -= 3;
+  } else if (ev.type === "panleft") {
+    pictureDiv.scrollLeft += 3;
+  } else if (ev.type === "panup") {
+    pictureDiv.scrollTop += 3;
+  } else if (ev.type === "pandown") {
+    pictureDiv.scrollTop -= 3;
   }
 });
 
