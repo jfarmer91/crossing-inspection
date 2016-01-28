@@ -76,9 +76,7 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
     console.log(ev.target.x);
 
     var scrollDistance = Math.abs(ev.target.x) + Math.abs(ev.target.width * 0.1 * ev.overallVelocity);
-    console.log(scrollDistance);
     $("#info").animate({
-      // pictureDiv.scrollLeft += Math.abs(ev.target.width * 0.25 * ev.overallVelocity)
       scrollLeft: scrollDistance
     }, 500)
 
@@ -88,11 +86,34 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
     // pictureDiv.scrollLeft += (Math.abs(ev.overallVelocity * 50) + 25);
     // console.log(Math.abs(ev.overallVelocity * 50) + 25);
   } else if (ev.type === "swiperight") {
-    pictureDiv.scrollLeft -= Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
+
+    console.log(ev.target.x);
+
+    var scrollDistance = Math.abs(ev.target.x) - Math.abs(ev.target.width * 0.1 * ev.overallVelocity);
+    $("#info").animate({
+      scrollLeft: scrollDistance
+    }, 500)
+
+    // pictureDiv.scrollLeft -= Math.abs(ev.target.width * 0.25 * ev.overallVelocity);
   } else if (ev.type === "swipeup") {
-    pictureDiv.scrollTop += Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
+    console.log(ev.target.y);
+
+    var scrollDistance = Math.abs(ev.target.y) + Math.abs(ev.target.height * 0.1 * ev.overallVelocity);
+    $("#info").animate({
+      scrollTop: scrollDistance
+    }, 500)
+
+
+    // pictureDiv.scrollTop += Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
   } else if (ev.type === "swipedown") {
-    pictureDiv.scrollTop -= Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
+    console.log(ev.target.y);
+
+    var scrollDistance = Math.abs(ev.target.y) - Math.abs(ev.target.height * 0.1 * ev.overallVelocity);
+    $("#info").animate({
+      scrollTop: scrollDistance
+    }, 500)
+
+    // pictureDiv.scrollTop -= Math.abs(ev.target.height * 0.25 * ev.overallVelocity);
   } else if (ev.type === "panright") {
     pictureDiv.scrollLeft -= 2;
   } else if (ev.type === "panleft") {
