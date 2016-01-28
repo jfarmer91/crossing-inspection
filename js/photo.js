@@ -62,14 +62,14 @@ hammertime.on('pinch pinchin pinchout pan panleft panright panup pandown swipeup
     image.style.width = Math.max(200, Math.min(4320, image.width - 25)) + "px";
   } else if (ev.type === "pinchout") {
     image.style.width = Math.max(200, Math.min(4320, image.width + 10)) + "px";
-  } else if (ev.type === "swipeleft") {
-    pictureDiv.scrollLeft += 100;
-  } else if (ev.type === "swiperight") {
-    pictureDiv.scrollLeft -= 100;
-  } else if (ev.type === "swipeup") {
-    pictureDiv.scrollTop += 100;
-  } else if (ev.type === "swipedown") {
-    pictureDiv.scrollTop -= 100;
+  // } else if (ev.type === "swipeleft") {
+  //   pictureDiv.scrollLeft += 100;
+  // } else if (ev.type === "swiperight") {
+  //   pictureDiv.scrollLeft -= 100;
+  // } else if (ev.type === "swipeup") {
+  //   pictureDiv.scrollTop += 100;
+  // } else if (ev.type === "swipedown") {
+  //   pictureDiv.scrollTop -= 100;
   } else if (ev.type === "panright") {
     pictureDiv.scrollLeft -= 3;
   } else if (ev.type === "panleft") {
