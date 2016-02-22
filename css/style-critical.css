@@ -400,3 +400,32 @@ button {
 @-ms-viewport {
   width: device-width;
 }
+
+
+/*-------------------------*/
+/* Esri Css Critical */
+/* ----------------------------------------------------------------*/
+@font-face {
+  font-family: 'CalciteWebCoreIcons';
+  src: url("../themes/calcite/icons/fonts/CalciteWebCoreIcons.eot");
+}
+
+[class^="esri-icon-"] {
+  font-family: 'CalciteWebCoreIcons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.esri-icon-question:before {
+  content: "\e66c";
+}
+
+.esri-icon-question {
+  *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe66c;');
+}
