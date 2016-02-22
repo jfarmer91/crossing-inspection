@@ -20,14 +20,10 @@ document.getElementById("info").innerHTML = "<img src='" + photoUrl + "' id='ima
 function zoom (x) {
   var previousWidth = document.getElementById("save-old-width").innerHTML;
 
-  console.log(previousWidth);
   var width = x.width;
   document.getElementById("save-old-width").innerHTML = width;
-  console.log(previousWidth);
-  console.log(width);
 
   var widthRatio = ( width / previousWidth );
-  console.log(widthRatio);
 
   if ( previousWidth === "" ) {
     x.style.width = "4320px";
